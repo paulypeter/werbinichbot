@@ -1,6 +1,7 @@
 """ Methods and handlers relating to the game """
 from telegram import Update
 from telegram.ext import ConversationHandler, CallbackContext
+from passlib.hash import pbkdf2_sha256 as sha256
 
 from .misc_commands import r
 from .constants import (
@@ -82,8 +83,9 @@ def set_game_pw(update: Update, _: CallbackContext) -> int:
         message = "Bitte gib ein anderes Passwort ein."
         res =  SETTING_GAME_PW
     else:
-        r.hset(user_id, "game_pw", game_pw)
-        message = 'Passwort gespeichert.'
+        pw_hash = sha256.hash(game_pw)
+        r.hset(user_id, "game_pw", pw_hash)
+        message = 'Passwort gesetzt.'
         res = ConversationHandler.END
     update.message.reply_text(message)
     return res
@@ -93,14 +95,13 @@ def enter_game_pw(update: Update, _: CallbackContext) -> int:
     user_id = update.message.from_user.id
     game_id = r.hget(user_id, "game_id")
     entered_pw = update.message.text
-    game_pw = get_game_pw(game_id)
-    if entered_pw == game_pw:
+    pw_hash = get_game_pw(game_id)
+    if sha256.verify(entered_pw, pw_hash):
         # entered correct password
         message_text = "Du bist dem Spiel beigetreten!"
         res = ConversationHandler.END
     else:
         # wrong password
-        r.hset(user_id, "game_id", "None")
         message_text = "Falsches Passwort.\nBitte das richtige Passwort eingeben oder /abbrechen."
         res = ENTERING_GAME_PW
     update.message.reply_text(message_text)
@@ -127,3 +128,14 @@ def list_games(update: Update, _: CallbackContext) -> int:
     else:
         message = "Es sind keine Spiele eingetragen."
     update.message.reply_text(message)
+
+def cancel_join_game(update: Update, _: CallbackContext) -> int:
+    """ cancel an action """
+    user_id = update.message.from_user.id
+    r.hset(user_id, "game_id", "None")
+    r.hdel(user_id, "game_host")
+    r.hdel(user_id, "game_pw")
+    update.message.reply_text(
+        'Aktion abgebrochen.'
+    )
+    return ConversationHandler.END

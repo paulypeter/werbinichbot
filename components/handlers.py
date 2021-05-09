@@ -17,7 +17,8 @@ from .game import (
     set_own_name,
     set_game_id,
     set_game_pw,
-    enter_game_pw
+    enter_game_pw,
+    cancel_join_game
 )
 from .constants import (
     SETTING_GAME_ID,
@@ -43,7 +44,7 @@ join_game_handler = ConversationHandler(
         SETTING_GAME_PW: [MessageHandler(Filters.text & ~Filters.command, set_game_pw)],
         ENTERING_GAME_PW: [MessageHandler(Filters.text & ~Filters.command, enter_game_pw)],
     },
-    fallbacks=[CommandHandler('abbrechen', cancel)],
+    fallbacks=[CommandHandler('abbrechen', cancel_join_game)],
 )
 
 set_character_handler = ConversationHandler(
