@@ -34,14 +34,17 @@ def join_game(update: Update, _: CallbackContext) -> int:
 def leave_game(update: Update, _: CallbackContext) -> int:
     """ leave current game """
     user_id = update.message.from_user.id
-    game_id = r.hget(user_id, "game_id")
-    if game_id == "None":
-        message = "Du spielst momentan nicht."
+    if user_id in r.scan(0)[1]:
+        game_id = r.hget(user_id, "game_id")
+        if game_id == "None":
+            message = "Du spielst momentan nicht."
+        else:
+            r.hset(user_id, "game_id", "None")
+            r.hdel(user_id, "character")
+            r.hdel(user_id, "game_host")
+            message = f"Du hast das Spiel {game_id} verlassen!"
     else:
-        r.hset(user_id, "game_id", "None")
-        r.hdel(user_id, "character")
-        r.hdel(user_id, "game_host")
-        message = f"Du hast das Spiel {game_id} verlassen!"
+        message = "Du spielst momentan nicht."
     update.message.reply_text(message)
 
 def set_game_id(update: Update, _: CallbackContext) -> int:

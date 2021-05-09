@@ -35,6 +35,7 @@ from components.character import list_player_chars
 from components.misc_commands import r
 from components.constants import SETTING_CHARACTER
 from components.game import leave_game, list_games
+from components.delete_user import set_delete_user_data
 from components.handlers import (
     set_own_name_handler,
     join_game_handler,
@@ -72,6 +73,7 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("charaktere_anzeigen", list_player_chars))
     dispatcher.add_handler(CommandHandler("spiel_verlassen", leave_game))
     dispatcher.add_handler(CommandHandler("spiele_anzeigen", list_games))
+    dispatcher.add_handler(CommandHandler("daten_loeschen", set_delete_user_data))
     dispatcher.add_handler(delete_user_handler)
     dispatcher.add_handler(set_own_name_handler)
     dispatcher.add_handler(set_character_handler)
