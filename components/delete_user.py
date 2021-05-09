@@ -9,7 +9,7 @@ def select_user_to_delete(update: Update, _: CallbackContext) -> int:
     """ select user """
     if str(update.message.from_user.id) != ADMIN:
         return ConversationHandler.END
-    keys = r.keys(pattern="*")
+    keys = r.scan(0)[1]
     keyboard = []
     for key in keys:
         name = r.hget(key, "name")

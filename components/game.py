@@ -67,7 +67,7 @@ def set_game_id(update: Update, _: CallbackContext) -> int:
 
 def get_game_pw(game_id):
     """ get game pw from host """
-    keys = r.keys(pattern="*")
+    keys = r.scan(0)[1]
     res = "None"
     for key in keys:
         if "game_host" in r.hkeys(key) and r.hget(key, "game_id") == game_id:
@@ -106,9 +106,9 @@ def enter_game_pw(update: Update, _: CallbackContext) -> int:
     update.message.reply_text(message_text)
     return res
 
-def get_list_of_games(r):
+def get_list_of_games():
     """ get a `set` of game IDs """
-    keys = r.keys(pattern="*")
+    keys = r.scan(0)[1]
     games_list = []
     if keys:
         for key in keys:
@@ -119,7 +119,7 @@ def get_list_of_games(r):
 
 def list_games(update: Update, _: CallbackContext) -> int:
     """ get a list of games """
-    games_list = get_list_of_games(r)
+    games_list = get_list_of_games()
     message = ""
     if games_list:
         for game in games_list:

@@ -15,7 +15,7 @@ def cancel(update: Update, _: CallbackContext) -> int:
 
 def get_other_players(user_id):
     """ get other players in the same game """
-    keys = r.keys(pattern="*")
+    keys = r.scan(0)[1]
     player_list = []
     user_game_id = r.hget(user_id, "game_id")
     for key in keys:
