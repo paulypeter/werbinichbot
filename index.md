@@ -15,6 +15,7 @@ Der Bot hilft dabei, während einer Video-/Telefonkonferenz "Wer bin ich?" zu sp
 | /charakter_eingeben | Einen Charakter für eine andere Person im gleichen Spiel angeben |
 | /charaktere_anzeigen | Eine Liste der anderen Charaktere anzeigen |
 | /spiel_verlassen | Das aktuelle Spiel verlassen |
+| /daten_loeschen | Die eigenen Daten löschen |
 
 ## Welche Daten werden gespeichert?
 
