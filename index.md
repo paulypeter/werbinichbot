@@ -2,6 +2,8 @@
 
 [Zum Bot](https://t.me/wer_bin_ich_gamebot)
 
+Kein Telegram? Klick [hier](https://werbinich.peter-pauly.eu)
+
 ## Was macht der Bot?
 
 Der Bot hilft dabei, während einer Video-/Telefonkonferenz "Wer bin ich?" zu spielen.
