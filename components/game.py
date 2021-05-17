@@ -33,7 +33,7 @@ def join_game(update: Update, _: CallbackContext) -> int:
 
 def leave_game(update: Update, _: CallbackContext) -> int:
     """ leave current game """
-    user_id = update.message.from_user.id
+    user_id = str(update.message.from_user.id)
     if user_id in r.scan(0)[1]:
         game_id = r.hget(user_id, "game_id")
         if game_id == "None":
