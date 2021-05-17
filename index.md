@@ -23,9 +23,10 @@ Der Bot hilft dabei, während einer Video-/Telefonkonferenz "Wer bin ich?" zu sp
 
 __Zusätzlich zu den durch Telegram gespeicherten Daten gilt Folgendes:__
 
-Für länger als 24 h werden gespeichert:
+Gespeichert werden:
 
 - die Telegram-User-ID
+- der angegebene Name
 
 Die Daten werden nicht an Dritte weitergegeben.
 
