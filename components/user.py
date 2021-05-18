@@ -1,9 +1,10 @@
 """ Deletion """
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ConversationHandler, CallbackContext
+from passlib.hash import pbkdf2_sha256 as sha256
 
 from .misc_commands import r
-from .constants import ADMIN, DELETE_USER
+from .constants import ADMIN, DELETE_USER, ENTER_USER_PW
 from .game import leave_game
 
 def select_user_to_delete(update: Update, _: CallbackContext) -> int:
@@ -36,3 +37,21 @@ def set_delete_user_data(update: Update, _: CallbackContext) -> int:
     message = "Deine Daten werden komplett gelöscht."
     update.message.reply_text(message)
     return ConversationHandler.END
+
+def set_user_pw(update: Update, _: CallbackContext) -> int:
+    update.message.reply_text('Bitte gib Dein Passwort ein.')
+    return ENTER_USER_PW
+
+def enter_user_pw(update: Update, _: CallbackContext) -> int:
+    user_id = update.message.from_user.id
+    user_pw = update.message.text
+    if user_pw in ["None", ""]:
+        message = "Bitte gib ein anderes Passwort ein."
+        res =  ENTER_USER_PW
+    else:
+        pw_hash = sha256.hash(user_pw)
+        r.hset(user_id, "pw_hash", pw_hash)
+        message = f'Passwort gesetzt.\nDein Nutzername ist {user_id}.'
+        res = ConversationHandler.END
+    update.message.reply_text(message)
+    return res

@@ -10,7 +10,7 @@ from telegram.ext import (
 
 from .misc_commands import cancel
 from .character import set_character, choose_player
-from .delete_user import select_user_to_delete, delete_user
+from .user import select_user_to_delete, delete_user, set_user_pw, enter_user_pw
 from .game import (
     start,
     join_game,
@@ -26,7 +26,8 @@ from .constants import (
     ENTERING_GAME_PW,
     SETTING_OWN_NAME,
     SETTING_CHARACTER,
-    DELETE_USER
+    DELETE_USER,
+    ENTER_USER_PW
 )
 
 set_own_name_handler = ConversationHandler(
@@ -59,6 +60,14 @@ delete_user_handler = ConversationHandler(
     entry_points = [CommandHandler('select_user_to_delete', select_user_to_delete)],
     states = {
         DELETE_USER: [CallbackQueryHandler(delete_user)],
+    },
+    fallbacks=[CommandHandler('abbrechen', cancel)],
+)
+
+set_pw_handler = ConversationHandler(
+    entry_points = [CommandHandler('pw_setzen', set_user_pw)],
+    states = {
+        ENTER_USER_PW: [MessageHandler(Filters.text & ~Filters.command, enter_user_pw)],
     },
     fallbacks=[CommandHandler('abbrechen', cancel)],
 )
