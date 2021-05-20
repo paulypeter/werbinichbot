@@ -1,4 +1,7 @@
-""" Deletion """
+""" User methods """
+import string
+import random
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ConversationHandler, CallbackContext
 from passlib.hash import pbkdf2_sha256 as sha256
@@ -39,8 +42,15 @@ def set_delete_user_data(update: Update, _: CallbackContext) -> int:
     return ConversationHandler.END
 
 def set_user_pw(update: Update, _: CallbackContext) -> int:
-    update.message.reply_text('Bitte gib Dein Passwort ein.')
-    return ENTER_USER_PW
+    user_id = update.message.from_user.id
+    pw = generate_random_pw(8)
+    pw_hash = sha256.hash(pw)
+    r.hset(user_id, "pw_hash", pw_hash)
+    r.hset(user_id, "change_pw", "true")
+    update.message.reply_text(
+        f'Dein Passwort ist {pw}.\nBitte ändere es bei der Anmeldung!'
+        f'\n\nDein Nutzername ist {user_id} .')
+    return ConversationHandler.END
 
 def enter_user_pw(update: Update, _: CallbackContext) -> int:
     user_id = update.message.from_user.id
@@ -54,4 +64,11 @@ def enter_user_pw(update: Update, _: CallbackContext) -> int:
         message = f'Passwort gesetzt.\nDein Nutzername ist {user_id}.'
         res = ConversationHandler.END
     update.message.reply_text(message)
+    return res
+
+def generate_random_pw(size):
+    chars = string.digits + string.ascii_letters
+    res = ""
+    for _ in range(size):
+        res += random.choice(chars)
     return res
