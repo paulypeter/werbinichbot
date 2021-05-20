@@ -2,7 +2,7 @@
 
 [Zum Bot](https://t.me/wer_bin_ich_gamebot)
 
-Kein Telegram? Klick [hier](https://werbinich.peter-pauly.eu)
+Kein Telegram? Klick [hier](https://werbinich.xyz)
 
 ## Was macht der Bot?
 
