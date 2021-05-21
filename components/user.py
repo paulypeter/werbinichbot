@@ -48,7 +48,7 @@ def set_user_pw(update: Update, _: CallbackContext) -> int:
     r.hset(user_id, "pw_hash", pw_hash)
     r.hset(user_id, "change_pw", "true")
     update.message.reply_text(
-        f'Dein Passwort ist {pw}.\nBitte ändere es bei der Anmeldung!'
+        f'Dein Passwort ist: {pw}\nBitte ändere es bei der Anmeldung!'
         f'\n\nDein Nutzername ist {user_id} .')
     return ConversationHandler.END
 
