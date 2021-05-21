@@ -13,10 +13,12 @@ Der Bot hilft dabei, während einer Video-/Telefonkonferenz "Wer bin ich?" zu sp
 | Befehl | Wirkung |
 |---|---|
 | /start | Anmeldung beim Bot |
+| /spiele_anzeigen | Eine Liste der aktuellen Spiele anzeigen |
 | /spiel_beitreten | Ein Spiel erstellen oder einem Spiel beitreten |
 | /charakter_eingeben | Einen Charakter für eine andere Person im gleichen Spiel angeben |
 | /charaktere_anzeigen | Eine Liste der anderen Charaktere anzeigen |
 | /spiel_verlassen | Das aktuelle Spiel verlassen |
+| /passwort_setzen | Ein Passwort für die Website setzen |
 | /daten_loeschen | Die eigenen Daten löschen |
 
 ## Welche Daten werden gespeichert?
