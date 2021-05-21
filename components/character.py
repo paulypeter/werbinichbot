@@ -31,7 +31,7 @@ def choose_player(update: Update, _: CallbackContext):
 def list_player_chars(update: Update, _: CallbackContext):
     """ List other players and their chars in this game """
     user_id = update.message.from_user.id
-    if r.hget(user_id, "game_id") != "None":
+    if user_id in r.scan(0)[1] and r.hget(user_id, "game_id") != "None":
         keys = get_other_players(user_id)
         message_text = ""
         for key in keys:
