@@ -17,7 +17,7 @@ def set_character(update: Update, _: CallbackContext) -> int:
 
 def choose_player(update: Update, _: CallbackContext):
     """ Choose a player """
-    user_id = update.message.from_user.id
+    user_id = str(update.message.from_user.id)
     if user_id in r.scan(0)[1] and r.hget(user_id, "game_id") != "None":
         keyboard = player_keyboard(update.message.from_user.id)
         reply_markup = InlineKeyboardMarkup(keyboard)
