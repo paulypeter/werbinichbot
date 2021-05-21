@@ -28,6 +28,10 @@ def set_own_name(update: Update, context: CallbackContext):
 
 def join_game(update: Update, _: CallbackContext) -> int:
     """ Join a game """
+    user_id = str(update.message.from_user.id)
+    if not user_id in r.scan(0)[1]:
+        update.message.reply_text('Bitte trage erst mit /start einen Namen für Dich ein!')
+        return ConversationHandler.END
     update.message.reply_text('Bitte gib die Spiel-ID ein.')
     return SETTING_GAME_ID
 
