@@ -18,7 +18,7 @@ def set_character(update: Update, _: CallbackContext) -> int:
 def choose_player(update: Update, _: CallbackContext):
     """ Choose a player """
     user_id = str(update.message.from_user.id)
-    if user_id in r.scan(0)[1] and r.hget(user_id, "game_id") != "None":
+    if r.exists(user_id) and r.hget(user_id, "game_id") != "None":
         keyboard = player_keyboard(update.message.from_user.id)
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text(text='Spieler auswählen: ', reply_markup=reply_markup)
@@ -31,12 +31,13 @@ def choose_player(update: Update, _: CallbackContext):
 def list_player_chars(update: Update, _: CallbackContext):
     """ List other players and their chars in this game """
     user_id = str(update.message.from_user.id)
-    if user_id in r.scan(0)[1] and r.hget(user_id, "game_id") != "None":
+    if r.exists(user_id) and r.hget(user_id, "game_id") != "None":
         keys = get_other_players(user_id)
         message_text = ""
         for key in keys:
-            if key != str(user_id) and r.hget(key, "character") is not None:
-                message_text += r.hget(key, "name") + " ist " + r.hget(key, "character") + "\n"
+            character = r.hget(key, "character")
+            if key != str(user_id) and character is not None:
+                message_text += r.hget(key, "name") + " ist " + character + "\n"
         if message_text == "":
             message_text = "Es wurden noch keine Charaktere eingetragen!"
     else:

@@ -29,7 +29,7 @@ def set_own_name(update: Update, context: CallbackContext):
 def join_game(update: Update, _: CallbackContext) -> int:
     """ Join a game """
     user_id = str(update.message.from_user.id)
-    if not user_id in r.scan(0)[1]:
+    if not r.exists(user_id):
         update.message.reply_text('Bitte trage erst mit /start einen Namen für Dich ein!')
         return ConversationHandler.END
     update.message.reply_text('Bitte gib die Spiel-ID ein.')
@@ -38,14 +38,13 @@ def join_game(update: Update, _: CallbackContext) -> int:
 def leave_game(update: Update, _: CallbackContext) -> int:
     """ leave current game """
     user_id = str(update.message.from_user.id)
-    if user_id in r.scan(0)[1]:
+    if r.exists(user_id):
         game_id = r.hget(user_id, "game_id")
         if game_id == "None":
             message = "Du spielst momentan nicht."
         else:
             r.hset(user_id, "game_id", "None")
-            r.hdel(user_id, "character")
-            r.hdel(user_id, "game_host")
+            r.hdel(user_id, "character", "game_host")
             message = f"Du hast das Spiel {game_id} verlassen!"
     else:
         message = "Du spielst momentan nicht."
@@ -78,7 +77,7 @@ def get_game_pw(game_id):
     keys = r.scan(0)[1]
     res = "None"
     for key in keys:
-        if "game_host" in r.hkeys(key) and r.hget(key, "game_id") == game_id:
+        if r.hexists(key, "game_host") and r.hget(key, "game_id") == game_id:
             res = str(r.hget(key, "game_pw"))
     return res
 
@@ -140,8 +139,7 @@ def cancel_join_game(update: Update, _: CallbackContext) -> int:
     """ cancel an action """
     user_id = update.message.from_user.id
     r.hset(user_id, "game_id", "None")
-    r.hdel(user_id, "game_host")
-    r.hdel(user_id, "game_pw")
+    r.hdel(user_id, "game_host", "game_pw")
     update.message.reply_text(
         'Aktion abgebrochen.'
     )
