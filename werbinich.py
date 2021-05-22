@@ -23,7 +23,6 @@ Redis:
 """
 
 import logging
-import regex
 
 from telegram import Update
 from telegram.ext import (
@@ -51,10 +50,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
-def is_valid_input(user_input):
-    match = regex.match(r'[0-9äöüÄÖÜßa-zA-Z\-\. ]*\Z', user_input)
-    return match is not None
 
 def button_clicked(update: Update, _: CallbackContext) -> int:
     query = update.callback_query
