@@ -32,6 +32,7 @@ from telegram.ext import (
 )
 
 from components.character import list_player_chars
+from components.error_handler import error_handler
 from components.misc_commands import r
 from components.constants import SETTING_CHARACTER
 from components.game import leave_game, list_games
@@ -82,6 +83,8 @@ def main() -> None:
     dispatcher.add_handler(join_game_handler)
 
     updater.dispatcher.add_handler(CallbackQueryHandler(button_clicked))
+
+    dispatcher.add_error_handler(error_handler)
 
     # Start the Bot
     updater.start_polling()
