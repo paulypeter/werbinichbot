@@ -21,6 +21,8 @@ Der Bot hilft dabei, während einer Video-/Telefonkonferenz "Wer bin ich?" zu sp
 | /passwort_setzen | Ein Passwort für die Website setzen |
 | /daten_loeschen | Die eigenen Daten löschen |
 
+Zu einer ausführlichen Anleitung geht's [hier](docs/manual.md)
+
 ## Welche Daten werden gespeichert?
 
 __Zusätzlich zu den durch Telegram gespeicherten Daten gilt Folgendes:__
