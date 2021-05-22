@@ -16,6 +16,8 @@ Der Bot hilft dabei, während einer Video-/Telefonkonferenz "Wer bin ich?" zu sp
 | /charaktere_anzeigen | Eine Liste der anderen Charaktere anzeigen |
 | /spiel_verlassen | Das aktuelle Spiel verlassen |
 
+Zu einer ausführlichen Anleitung geht's [hier](docs/manual.md)
+
 ## Welche Daten werden gespeichert?
 
 __Zusätzlich zu den durch Telegram gespeicherten Daten gilt Folgendes:__
