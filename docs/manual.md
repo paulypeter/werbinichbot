@@ -20,4 +20,4 @@ Die Website benötigt Cookies.
 | 7 | Benutzerdaten löschen | /daten_loeschen | "Meine Daten löschen" anklicken |
 | 7a | Löschen bestätigen | (passiert automatisch) | "Meine Daten löschen" anklicken |
 
-* Spiele, die noch nicht existieren, werden bei der ersten Angabe der ID und des Passworts erstellt.
+\* Spiele, die noch nicht existieren, werden bei der ersten Angabe der ID und des Passworts erstellt.
