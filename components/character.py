@@ -18,7 +18,11 @@ def set_character(update: Update, _: CallbackContext) -> int:
 def choose_player(update: Update, _: CallbackContext):
     """ Choose a player """
     user_id = str(update.message.from_user.id)
-    if r.exists(user_id) and r.hget(user_id, "game_id") != "None":
+    keys = get_other_players(user_id)
+    if len(keys) == 0:
+        update.message.reply_text("Warte noch, bis andere Spieler beigetreten sind.")
+        res = ConversationHandler.END
+    elif r.exists(user_id) and r.hget(user_id, "game_id") != "None":
         keyboard = player_keyboard(update.message.from_user.id)
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text(text='Spieler auswählen: ', reply_markup=reply_markup)
