@@ -8,7 +8,7 @@ from .misc_commands import player_keyboard, get_other_players, r
 def set_character(update: Update, _: CallbackContext) -> int:
     """ Set another player's char """
     selected_player = r.hget(update.message.from_user.id, "selected_player")
-    chosen_character = update.message.text.strip()
+    chosen_character = update.message.text
     r.hset(selected_player, "character", chosen_character)
     r.hset(selected_player, "solved", "false")
     r.hdel(update.message.from_user.id, "selected_player")
