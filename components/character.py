@@ -8,8 +8,9 @@ from .misc_commands import player_keyboard, get_other_players, r
 def set_character(update: Update, _: CallbackContext) -> int:
     """ Set another player's char """
     selected_player = r.hget(update.message.from_user.id, "selected_player")
-    chosen_character = update.message.text
+    chosen_character = update.message.text.strip()
     r.hset(selected_player, "character", chosen_character)
+    r.hset(selected_player, "solved", "false")
     r.hdel(update.message.from_user.id, "selected_player")
     update.message.reply_text(
         f'Alles klar! Der Charakter für {r.hget(selected_player, "name")} ist {chosen_character}.')
@@ -18,9 +19,9 @@ def set_character(update: Update, _: CallbackContext) -> int:
 def choose_player(update: Update, _: CallbackContext):
     """ Choose a player """
     user_id = str(update.message.from_user.id)
-    keys = get_other_players(user_id)
+    keys = get_other_players(user_id, filter_players=True)
     if len(keys) == 0:
-        update.message.reply_text("Warte noch, bis andere Spieler beigetreten sind.")
+        update.message.reply_text("Es kann niemandem ein Charakter zugewiesen werden.")
         res = ConversationHandler.END
     elif r.exists(user_id) and r.hget(user_id, "game_id") != "None":
         keyboard = player_keyboard(update.message.from_user.id)

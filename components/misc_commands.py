@@ -13,13 +13,27 @@ def cancel(update: Update, _: CallbackContext) -> int:
     )
     return ConversationHandler.END
 
-def get_other_players(user_id):
+def get_other_players(user_id, filter_players=False):
     """ get other players in the same game """
+    def can_be_assigned(user_id, filter_players):
+        character = r.hget(user_id, "character")
+        solved = r.hget(user_id, "solved")
+        return True if not filter_players else (
+            (
+                str(character) == "None" or
+                solved == "true"
+            )
+        )
+
     keys = r.scan(0)[1]
     player_list = []
     user_game_id = r.hget(user_id, "game_id")
     for key in keys:
-        if r.hget(key, "game_id") == str(user_game_id) and str(user_id) != key:
+        if (
+            r.hget(key, "game_id") == str(user_game_id) and
+            str(user_id) != key and
+            can_be_assigned(key, filter_players)
+        ):
             player_list.append(key)
     return player_list
 
@@ -39,7 +53,7 @@ def player_keyboard(user_id):
 
     keyboard = []
     player_index = 0
-    keys = get_other_players(user_id)
+    keys = get_other_players(user_id, filter_players=True)
     num_of_rows = get_number_of_rows(keys)
     for _ in range(num_of_rows):
         button_row = []
