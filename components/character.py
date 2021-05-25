@@ -44,8 +44,9 @@ def list_player_chars(update: Update, _: CallbackContext):
         message_text = ""
         for key in keys:
             character = r.hget(key, "character")
+            solved = " ✓" if r.hget(key, "solved") == "true" else ""
             if key != str(user_id) and character is not None:
-                message_text += r.hget(key, "name") + " ist " + character + "\n"
+                message_text += f'{r.hget(key, "name")} ist {character}{solved}\n'
         if message_text == "":
             message_text = "Es wurden noch keine Charaktere eingetragen!"
     else:
