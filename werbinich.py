@@ -42,7 +42,8 @@ from components.handlers import (
     set_own_name_handler,
     join_game_handler,
     set_character_handler,
-    delete_user_handler
+    delete_user_handler,
+    set_solved_handler
 )
 
 # Enable logging
@@ -76,6 +77,8 @@ def main() -> None:
     dispatcher.add_handler(delete_user_handler)
     dispatcher.add_handler(set_own_name_handler)
     dispatcher.add_handler(set_character_handler)
+    dispatcher.add_handler(set_solved_handler)
+   
 
     dispatcher.add_handler(join_game_handler)
 
