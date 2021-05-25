@@ -54,7 +54,7 @@ def set_user_pw(update: Update, _: CallbackContext) -> int:
 
 def enter_user_pw(update: Update, _: CallbackContext) -> int:
     user_id = str(update.message.from_user.id)
-    user_pw = update.message.text
+    user_pw = update.message.text.strip()
     if user_pw in ["None", ""]:
         message = "Bitte gib ein anderes Passwort ein."
         res =  ENTER_USER_PW

@@ -19,10 +19,10 @@ def start(update: Update, _: CallbackContext) -> int:
 
 def set_own_name(update: Update, context: CallbackContext):
     """ Setting your own name """
-    r.hset(update.message.from_user.id, "name", update.message.text)
+    r.hset(update.message.from_user.id, "name", update.message.text.strip())
     r.hset(update.message.from_user.id, "game_id", "None")
-    update.message.reply_text(f'Danke, {update.message.text}. Viel Spaß!')
-    message = f'{update.message.text} hat sich gerade angemeldet!'
+    update.message.reply_text(f'Danke, {update.message.text.strip()}. Viel Spaß!')
+    message = f'{update.message.text.strip()} hat sich gerade angemeldet!'
     context.bot.send_message(chat_id=ADMIN, text=message)
     return ConversationHandler.END
 
@@ -52,7 +52,7 @@ def leave_game(update: Update, _: CallbackContext) -> int:
 
 def set_game_id(update: Update, _: CallbackContext) -> int:
     """ enter a game id to create or join """
-    game_id = update.message.text
+    game_id = update.message.text.strip()
     user_id = update.message.from_user.id
     games_list = get_list_of_games()
     if game_id == "None":
@@ -84,7 +84,7 @@ def get_game_pw(game_id):
 def set_game_pw(update: Update, _: CallbackContext) -> int:
     """ set a game PW """
     user_id = update.message.from_user.id
-    game_pw = update.message.text
+    game_pw = update.message.text.strip()
     if game_pw in ["None", ""]:
         message = "Bitte gib ein anderes Passwort ein."
         res =  SETTING_GAME_PW
@@ -100,7 +100,7 @@ def enter_game_pw(update: Update, _: CallbackContext) -> int:
     """ enter a pw for the chosen game """
     user_id = update.message.from_user.id
     game_id = r.hget(user_id, "game_id")
-    entered_pw = update.message.text
+    entered_pw = update.message.text.strip()
     pw_hash = get_game_pw(game_id)
     if sha256.verify(entered_pw, pw_hash):
         # entered correct password
