@@ -37,7 +37,7 @@ def get_other_players(user_id, filter_players=False):
             player_list.append(key)
     return player_list
 
-def player_keyboard(user_id):
+def player_keyboard(user_id, filter_players=False):
     """ generate a keyboard """
     def get_number_of_rows(player_list):
         num_of_players = len(player_list)
@@ -53,7 +53,7 @@ def player_keyboard(user_id):
 
     keyboard = []
     player_index = 0
-    keys = get_other_players(user_id, filter_players=True)
+    keys = get_other_players(user_id, filter_players=filter_players)
     num_of_rows = get_number_of_rows(keys)
     for _ in range(num_of_rows):
         button_row = []
@@ -63,5 +63,10 @@ def player_keyboard(user_id):
             player_index += 1
         keyboard.append(button_row)
     return keyboard
+
+def send_select_player_message(update: Update, filter_players=False) -> None:
+    keyboard = player_keyboard(update.message.from_user.id, filter_players=filter_players)
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text(text='Spieler auswählen: ', reply_markup=reply_markup)
 
 r = redis.StrictRedis(decode_responses=True, db=2)
