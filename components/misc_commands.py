@@ -13,17 +13,31 @@ def cancel(update: Update, _: CallbackContext) -> int:
     )
     return ConversationHandler.END
 
-def get_other_players(user_id):
+def get_other_players(user_id, filter_players=False):
     """ get other players in the same game """
+    def can_be_assigned(user_id, filter_players):
+        character = r.hget(user_id, "character")
+        solved = r.hget(user_id, "solved")
+        return True if not filter_players else (
+            (
+                str(character) == "None" or
+                solved == "true"
+            )
+        )
+
     keys = r.scan(0)[1]
     player_list = []
     user_game_id = r.hget(user_id, "game_id")
     for key in keys:
-        if r.hget(key, "game_id") == str(user_game_id) and str(user_id) != key:
+        if (
+            r.hget(key, "game_id") == str(user_game_id) and
+            str(user_id) != key and
+            can_be_assigned(key, filter_players)
+        ):
             player_list.append(key)
     return player_list
 
-def player_keyboard(user_id):
+def player_keyboard(user_id, filter_players=False):
     """ generate a keyboard """
     def get_number_of_rows(player_list):
         num_of_players = len(player_list)
@@ -39,7 +53,7 @@ def player_keyboard(user_id):
 
     keyboard = []
     player_index = 0
-    keys = get_other_players(user_id)
+    keys = get_other_players(user_id, filter_players=filter_players)
     num_of_rows = get_number_of_rows(keys)
     for _ in range(num_of_rows):
         button_row = []
@@ -49,5 +63,10 @@ def player_keyboard(user_id):
             player_index += 1
         keyboard.append(button_row)
     return keyboard
+
+def send_select_player_message(update: Update, filter_players=False) -> None:
+    keyboard = player_keyboard(update.message.from_user.id, filter_players=filter_players)
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text(text='Spieler auswählen: ', reply_markup=reply_markup)
 
 r = redis.StrictRedis(decode_responses=True, db=2)
