@@ -45,7 +45,7 @@ def list_player_chars(update: Update, _: CallbackContext):
         for key in keys:
             character = r.hget(key, "character")
             solved = " ✓" if r.hget(key, "solved") == "true" else ""
-            if key != str(user_id) and character is not None:
+            if key != str(user_id) and str(character) != "None":
                 message_text += f'{r.hget(key, "name")} ist {character}{solved}\n'
         if message_text == "":
             message_text = "Es wurden noch keine Charaktere eingetragen!"
@@ -75,5 +75,5 @@ def set_character_solved(update: Update, _: CallbackContext) -> int:
     user_id_to_set_solved = query.data
     user_name_to_set_solved = r.hget(user_id_to_set_solved, "name")
     r.hset(user_id_to_set_solved, "solved", "true")
-    query.edit_message_text(text = f'{user_name_to_set_solved}s Charakter wurde als gelöst markiert.')
+    query.edit_message_text(text=f'{user_name_to_set_solved}s Charakter wurde als gelöst markiert.')
     return ConversationHandler.END
