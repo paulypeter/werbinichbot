@@ -12,6 +12,11 @@ from .constants import (
     ADMIN
 )
 
+from .py_input_validator.validator import (
+    validate_username,
+    validate_pw
+)
+
 def start(update: Update, _: CallbackContext) -> int:
     """ Start the bot """
     update.message.reply_text('Hallo! Bitte gib deinen Namen ein.')
@@ -19,12 +24,16 @@ def start(update: Update, _: CallbackContext) -> int:
 
 def set_own_name(update: Update, context: CallbackContext):
     """ Setting your own name """
-    r.hset(update.message.from_user.id, "name", update.message.text.strip())
-    r.hset(update.message.from_user.id, "game_id", "None")
-    update.message.reply_text(f'Danke, {update.message.text.strip()}. Viel Spaß!')
-    message = f'{update.message.text.strip()} hat sich gerade angemeldet!'
-    context.bot.send_message(chat_id=ADMIN, text=message)
-    return ConversationHandler.END
+    username = update.message.text.strip()
+    if validate_username(username):
+        r.hset(update.message.from_user.id, "name", username)
+        r.hset(update.message.from_user.id, "game_id", "None")
+        update.message.reply_text(f'Danke, {username}. Viel Spaß!')
+        message = f'{username} hat sich gerade angemeldet!'
+        context.bot.send_message(chat_id=ADMIN, text=message)
+        return ConversationHandler.END
+    update.message.reply_text('Bitte gib einen gültigen Namen ein.')
+    return SETTING_OWN_NAME
 
 def join_game(update: Update, _: CallbackContext) -> int:
     """ Join a game """
@@ -53,6 +62,9 @@ def leave_game(update: Update, _: CallbackContext) -> int:
 def set_game_id(update: Update, _: CallbackContext) -> int:
     """ enter a game id to create or join """
     game_id = update.message.text.strip()
+    if not validate_username(game_id):
+        update.message.reply_text("Bitte gib einen gültigen Namen für das Spiel ein.")
+        return SETTING_GAME_ID
     user_id = update.message.from_user.id
     games_list = get_list_of_games()
     if game_id == "None":
@@ -85,8 +97,9 @@ def set_game_pw(update: Update, _: CallbackContext) -> int:
     """ set a game PW """
     user_id = update.message.from_user.id
     game_pw = update.message.text.strip()
-    if game_pw in ["None", ""]:
-        message = "Bitte gib ein anderes Passwort ein."
+    if game_pw in ["None", ""] or not validate_pw(game_pw):
+        message = ('Bitte gib ein anderes Passwort ein.\n' +
+            'Es sollte aus mindestens 8 Zeichen bestehen.')
         res =  SETTING_GAME_PW
     else:
         pw_hash = sha256.hash(game_pw)

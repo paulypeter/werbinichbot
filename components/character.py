@@ -4,11 +4,15 @@ from telegram.ext import ConversationHandler, CallbackContext
 
 from .constants import SETTING_CHARACTER
 from .misc_commands import player_keyboard, get_other_players, r
+from .py_input_validator.validator import validate_username
 
 def set_character(update: Update, _: CallbackContext) -> int:
     """ Set another player's char """
     selected_player = r.hget(update.message.from_user.id, "selected_player")
     chosen_character = update.message.text.strip()
+    if not validate_username(chosen_character):
+        update.message.reply_text("Bitte gib einen gültigen Charakter ein!")
+        return SETTING_CHARACTER
     r.hset(selected_player, "character", chosen_character)
     r.hdel(update.message.from_user.id, "selected_player")
     update.message.reply_text(
