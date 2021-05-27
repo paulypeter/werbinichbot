@@ -4,6 +4,8 @@ Die Website benötigt Cookies.
 
 Bot-Eingaben, die keine Befehle sind, benötigen kein `/` am Anfang.
 
+## Grundlegende Bedienung der Website bzw. des Bots
+
 | Schritt | Aktion | Bot-Befehl (nach Eingabe "Senden") | Website |
 |---|---|---|---|
 | 1 | __Registrierung starten__ | `/start` | "Registrieren" anklicken |
@@ -23,3 +25,11 @@ Bot-Eingaben, die keine Befehle sind, benötigen kein `/` am Anfang.
 | 7a | Löschen bestätigen | (passiert automatisch) | "Meine Daten löschen" anklicken |
 
 \* Spiele, die noch nicht existieren, werden bei der ersten Angabe der ID und des Passworts erstellt.
+
+## weitere nützliche Operationen
+
+| Aktion | Bot-Befehl | Website |
+|---|---|---|
+| Ein Passwort für die Website setzen | `/passwort_setzen` | (geschieht beim Registrieren) |
+| Einen Charakter als gelöst markieren | `/geloest_setzen` | Auf das ✕ unter "gelöst" klicken |
+
