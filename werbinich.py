@@ -34,7 +34,7 @@ from telegram.ext import (
 
 from components.character import list_player_chars
 from components.error_handler import error_handler
-from components.misc_commands import r
+from components.misc_commands import r, help_command
 from components.constants import SETTING_CHARACTER
 from components.game import leave_game, list_games
 from components.user import set_delete_user_data, set_user_pw
@@ -74,6 +74,7 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("spiele_anzeigen", list_games))
     dispatcher.add_handler(CommandHandler("daten_loeschen", set_delete_user_data))
     dispatcher.add_handler(CommandHandler("passwort_setzen", set_user_pw))
+    dispatcher.add_handler(CommandHandler("hilfe", help_command))
     dispatcher.add_handler(delete_user_handler)
     dispatcher.add_handler(set_own_name_handler)
     dispatcher.add_handler(set_character_handler)
