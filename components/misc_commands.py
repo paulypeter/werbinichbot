@@ -13,6 +13,18 @@ def cancel(update: Update, _: CallbackContext) -> int:
     )
     return ConversationHandler.END
 
+def help_command(update: Update, _: CallbackContext) -> int:
+    update.message.reply_text(
+        'Dieser Bot soll helfen, online "Wer bin ich" zu spielen.\n'
+        'Eine Übersicht der Bot-Befehle gibt es hier:\n'
+        'https://paulypeter.github.io/werbinichbot/\n\n'
+        'Außerdem gibt es eine Kurzanleitung für den Bot und die Website unter\n'
+        'https://paulypeter.github.io/werbinichbot/docs/manual.html\n\n'
+        'Zur Website:\n'
+        'https://werbinich.xyz'
+    )
+    return ConversationHandler.END
+
 def get_other_players(user_id, filter_players=False):
     """ get other players in the same game """
     def can_be_assigned(user_id, filter_players):
