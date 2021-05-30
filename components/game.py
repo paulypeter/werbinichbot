@@ -41,6 +41,9 @@ def join_game(update: Update, _: CallbackContext) -> int:
     if not r.exists(user_id):
         update.message.reply_text('Bitte trage erst mit /start einen Namen für Dich ein!')
         return ConversationHandler.END
+    if str(r.hget(user_id, "game_id")) != "None":
+        update.message.reply_text('Du spielst schon.')
+        return ConversationHandler.END
     update.message.reply_text('Bitte gib die Spiel-ID ein.')
     return SETTING_GAME_ID
 
