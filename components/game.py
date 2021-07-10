@@ -28,7 +28,7 @@ def set_own_name(update: Update, context: CallbackContext):
     if validate_username(username):
         r.hset(update.message.from_user.id, "name", username)
         r.hset(update.message.from_user.id, "game_id", "None")
-        update.message.reply_text(f'Danke, {username}. Viel Spaß!')
+        update.message.reply_text(f'Danke, {username}. Viel Spaß!\n\nDu kannst dir /spiele_anzeigen oder einem /spiel_beitreten.')
         message = f'{username} hat sich gerade angemeldet!'
         context.bot.send_message(chat_id=ADMIN, text=message)
         return ConversationHandler.END
@@ -107,7 +107,7 @@ def set_game_pw(update: Update, _: CallbackContext) -> int:
     else:
         pw_hash = sha256.hash(game_pw)
         r.hset(user_id, "game_pw", pw_hash)
-        message = 'Passwort gesetzt.'
+        message = 'Passwort gesetzt.\n\nDu kannst jetzt für Mitspieler:innen einen /charakter_eingeben oder dir bereits eingegebene /charaktere_anzeigen.'
         res = ConversationHandler.END
     update.message.reply_text(message)
     return res
@@ -120,7 +120,7 @@ def enter_game_pw(update: Update, _: CallbackContext) -> int:
     pw_hash = get_game_pw(game_id)
     if sha256.verify(entered_pw, pw_hash):
         # entered correct password
-        message_text = "Du bist dem Spiel beigetreten!"
+        message_text = "Du bist dem Spiel beigetreten!\n\nDu kannst jetzt für Mitspieler:innen einen /charakter_eingeben oder dir bereits eingegebene /charaktere_anzeigen."
         res = ConversationHandler.END
     else:
         # wrong password
