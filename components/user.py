@@ -6,7 +6,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ConversationHandler, CallbackContext
 from passlib.hash import pbkdf2_sha256 as sha256
 
-from .misc_commands import r
+from .misc_commands import r, get_all_keys
 from .constants import ADMIN, DELETE_USER, ENTER_USER_PW
 from .game import leave_game
 
@@ -14,7 +14,7 @@ def select_user_to_delete(update: Update, _: CallbackContext) -> int:
     """ select user """
     if str(update.message.from_user.id) != ADMIN:
         return ConversationHandler.END
-    keys = r.scan(0)[1]
+    keys = get_all_keys()
     keyboard = []
     for key in keys:
         name = r.hget(key, "name")
