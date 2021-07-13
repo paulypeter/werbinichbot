@@ -37,7 +37,7 @@ def get_other_players(user_id, filter_players=False):
             )
         )
 
-    keys = r.scan(0)[1]
+    keys = get_all_keys()
     player_list = []
     user_game_id = r.hget(user_id, "game_id")
     for key in keys:
@@ -80,5 +80,15 @@ def send_select_player_message(update: Update, filter_players=False) -> None:
     keyboard = player_keyboard(update.message.from_user.id, filter_players=filter_players)
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text(text='Spieler auswählen: ', reply_markup=reply_markup)
+
+def get_all_keys():
+    i = 0
+    res = r.scan(i)
+    keys = res[1]
+    while res[0] != 0:
+        res = r.scan(i)
+        keys += res[1]
+        i += 1
+    return set(keys)
 
 r = redis.StrictRedis(decode_responses=True, db=2)

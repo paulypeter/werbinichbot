@@ -3,7 +3,7 @@ from telegram import Update
 from telegram.ext import ConversationHandler, CallbackContext
 from passlib.hash import pbkdf2_sha256 as sha256
 
-from .misc_commands import r
+from .misc_commands import r, get_all_keys
 from .constants import (
     SETTING_OWN_NAME,
     SETTING_GAME_ID,
@@ -89,7 +89,7 @@ def set_game_id(update: Update, _: CallbackContext) -> int:
 
 def get_game_pw(game_id):
     """ get game pw from host """
-    keys = r.scan(0)[1]
+    keys = get_all_keys()
     res = "None"
     for key in keys:
         if r.hexists(key, "game_host") and r.hget(key, "game_id") == game_id:
@@ -131,7 +131,7 @@ def enter_game_pw(update: Update, _: CallbackContext) -> int:
 
 def get_list_of_games():
     """ get a `set` of game IDs """
-    keys = r.scan(0)[1]
+    keys = get_all_keys()
     games_list = []
     if keys:
         for key in keys:
